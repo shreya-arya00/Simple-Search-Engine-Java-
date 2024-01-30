@@ -1,0 +1,23 @@
+[1;31m
+Start test 1[0m
+> 1
+> John
+> 1
+(> this text will definitely be no match
+[1;31m
+Start test 2[0m
+> 3
+> john smith smith@gmail.com
+&> John lock john_lock@somecompany.com
+#> help me iamaprogrammer@gmail.com
+> 4
+> john
+john smith smith@gmail.com
+$john lock john_lock@somecompany.com
+> Somecompany
+$john lock john_lock@somecompany.com
+> @
+john smith smith@gmail.com
+$john lock john_lock@somecompany.com
+!help me iamaprogrammer@gmail.com
+(> this text will definitely be no match

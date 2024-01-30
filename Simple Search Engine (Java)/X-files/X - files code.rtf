@@ -1,0 +1,135 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2759
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 import java.io.BufferedReader;\
+import java.io.FileReader;\
+import java.io.IOException;\
+import java.util.ArrayList;\
+import java.util.List;\
+import java.util.Scanner;\
+\
+class Person \{\
+    String firstName;\
+    String lastName;\
+    String email;\
+\
+    public Person(String firstName, String lastName, String email) \{\
+        this.firstName = firstName;\
+        this.lastName = lastName;\
+        this.email = email;\
+    \}\
+\
+    @Override\
+    public String toString() \{\
+        return firstName + " " + lastName + " " + email;\
+    \}\
+\
+    public boolean contains(String query) \{\
+        // Check if any part of the person's details contains the query\
+        return firstName.toLowerCase().contains(query) ||\
+                lastName.toLowerCase().contains(query) ||\
+                email.toLowerCase().contains(query);\
+    \}\
+\}\
+\
+public class Main \{\
+    private static List<Person> people = new ArrayList<>();\
+    private static Scanner scanner = new Scanner(System.in);\
+\
+    public static void main(String[] args) \{\
+        if (args.length != 2 || !args[0].equals("--data")) \{\
+            System.out.println("Usage: java PeopleSearch --data <filename>");\
+            System.exit(1);\
+        \}\
+\
+        // Read and store people data from the specified file\
+        String filename = args[1];\
+        readPeopleDataFromFile(filename);\
+\
+        // Display the menu and process user input until exit\
+        int choice;\
+        do \{\
+            displayMenu();\
+            choice = getUserChoice();\
+\
+            switch (choice) \{\
+                case 1:\
+                    searchPerson();\
+                    break;\
+                case 2:\
+                    printAllPeople();\
+                    break;\
+                case 0:\
+                    System.out.println("Bye!");\
+                    break;\
+                default:\
+                    System.out.println("Incorrect option! Try again.");\
+            \}\
+        \} while (choice != 0);\
+    \}\
+\
+    private static void readPeopleDataFromFile(String filename) \{\
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) \{\
+            String line;\
+            while ((line = reader.readLine()) != null) \{\
+                String[] personData = line.split("\\\\s+", 3);\
+                String firstName = personData[0];\
+                String lastName = personData[1];\
+                String email = (personData.length == 3) ? personData[2] : "";\
+                people.add(new Person(firstName, lastName, email));\
+            \}\
+        \} catch (IOException e) \{\
+            System.out.println("Error reading data from file: " + e.getMessage());\
+            System.exit(1);\
+        \}\
+    \}\
+\
+    private static void displayMenu() \{\
+        System.out.println("=== Menu ===");\
+        System.out.println("1. Find a person");\
+        System.out.println("2. Print all people");\
+        System.out.println("0. Exit");\
+    \}\
+\
+    private static int getUserChoice() \{\
+        System.out.print("> ");\
+        return Integer.parseInt(scanner.nextLine());\
+    \}\
+\
+    private static void searchPerson() \{\
+        System.out.println("Enter a name or email to search all suitable people.");\
+        String query = scanner.nextLine().trim().toLowerCase();\
+\
+        // Search and print people matching the query\
+        List<Person> foundPeople = new ArrayList<>();\
+        for (Person person : people) \{\
+            if (person.contains(query)) \{\
+                foundPeople.add(person);\
+            \}\
+        \}\
+\
+        // Print the results\
+        if (!foundPeople.isEmpty()) \{\
+            System.out.println("=== Found people ===");\
+            for (Person foundPerson : foundPeople) \{\
+                System.out.println(foundPerson);\
+            \}\
+        \} else \{\
+            System.out.println("No matching people found.");\
+        \}\
+    \}\
+\
+    private static void printAllPeople() \{\
+        System.out.println("=== List of people ===");\
+        for (Person person : people) \{\
+            System.out.println(person);\
+        \}\
+    \}\
+\}\
+}
